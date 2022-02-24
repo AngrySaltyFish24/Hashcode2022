@@ -1,3 +1,4 @@
+from distutils.file_util import write_file
 import sys
 import pathlib
 
@@ -15,7 +16,7 @@ class Contributor:
 
 
 class Project:
-    def __init__(self, days, score, best, roles):
+    def __init__(self, name, days, score, best, roles):
         self.name = name
         self.days = days
         self.score = score
@@ -44,10 +45,19 @@ def read_data(filename):
             projects.append(Project(name, D, S, B, R))
     return contributors, projects
 
+def solve(contrib, proj):
+    pass
+
+def write_file(filename, answer):
+    pass
 
 if __name__ == "__main__":
     input_folder = pathlib.Path("input_data")
     for input_file in input_folder.iterdir():
         print(f"Reading file {input_file}")
 
-        read_data(input_file)
+        contributors, projects = read_data(input_file)
+
+        answer = solve(contributors, projects)
+
+        write_file(input_file.split('.')[0]+'.out', answer)
