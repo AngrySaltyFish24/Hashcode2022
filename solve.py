@@ -1,3 +1,4 @@
+from audioop import reverse
 from distutils.file_util import write_file
 import sys
 import pathlib
@@ -50,7 +51,7 @@ def read_data(filename):
     return contributors, projects
 
 def solve(contrib, proj):
-    sorted_proj = sorted(proj, key=lambda x: x.rating)
+    sorted_proj = sorted(proj, key=lambda x: x.rating, reverse=True)
 
 def write_file(filename, answer):
     pass
