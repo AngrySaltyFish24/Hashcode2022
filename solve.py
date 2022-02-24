@@ -16,6 +16,10 @@ class Contributor:
 
 
 class Project:
+    @property
+    def rating(self):
+        return self.score - self.days
+
     def __init__(self, name, days, score, best, roles):
         self.name = name
         self.days = days
@@ -46,7 +50,7 @@ def read_data(filename):
     return contributors, projects
 
 def solve(contrib, proj):
-    pass
+    sorted_proj = sorted(proj, key=lambda x: x.rating)
 
 def write_file(filename, answer):
     pass
