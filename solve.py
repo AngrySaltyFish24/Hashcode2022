@@ -58,7 +58,7 @@ def read_data(filename):
             s = set()
             for _ in range(R):
                 skill_name, level = in_file.readline().strip().split(" ")
-                assert skill_name not in s, f'{name}{p}{s}{skill_name}'
+                #assert skill_name not in s, f'{name}{p}{s}{skill_name}'
                 s.add(skill_name)
                 level = int(level)
                 skills.append((skill_name, level))
@@ -73,19 +73,19 @@ def get_next_possible_projects(workers, projects, day_counter):
     people_set = set()
 
     for project in projects:
-        print(project.name)
+        #print(project.name)
         if project.time_worked > 0 or project.best < day_counter:
-            print('floop')
+            #print('floop')
             continue
         # do we have bois for problem
         work_pair = [[worker, True] for worker in workers]
         picked_list = []
         for skill, level in project.skills:
-            print('a', skill, level)
+            #print('a', skill, level)
             picked = False
             picked_i = 0
             for i, (worker, available) in enumerate(work_pair):
-                print('b',worker.skills, available)
+                #print('b',worker.skills, available)
                 if not available or worker in people_set:
                     continue
                 if skill in worker.skills:
@@ -95,15 +95,16 @@ def get_next_possible_projects(workers, projects, day_counter):
                         break
             if picked:
                 work_pair[picked_i][1] = False
-                picked_list.append((worker, skill))
-            print(picked_list)
-        print(project.name, len(project.skills))
+                picked_list.append((worker, skill+'@'+str(level)))
+            #print(picked_list)
+        #print(project.name, len(project.skills))
         if len(picked_list) == len(project.skills):
             people_set.update([worker for worker, _ in picked_list])
             people.append(picked_list)
             output_projects.append(project)
         else:
-            print('wtf')
+            pass
+            #print('wtf')
 
     return output_projects, people
 
@@ -117,10 +118,10 @@ def update(projects):
             for worker in proj.workers:
                 # update their skills
                 if (
-                    proj.sneaky_skills[worker.skill_working_on]
-                    == worker.skills[worker.skill_working_on]
+                    int(worker.skill_working_on.split('@')[1])
+                    == worker.skills[worker.skill_working_on.split('@')[0]]
                 ):
-                    worker.skills[worker.skill_working_on] += 1
+                    worker.skills[worker.skill_working_on.split('@')[0]] += 1
                 worker.working = False
         else:
             proj.time_worked += 1
@@ -134,17 +135,17 @@ def solve(contrib, proj):
     projects_being_worked_on = []
     output=[]
     while True:
-        print("boop")
+        #print("boop")
         projects, people = get_next_possible_projects(contrib, sorted_proj, day_counter)
-        print(f" printing projects {projects}")
-        print(f" printing people {people}")
+        #print(f" printing projects {projects}")
+        #print(f" printing people {people}")
         if projects == [] and projects_being_worked_on == []:
             break
         for project, workers in zip(projects, people):
             project.assign_workers(workers)
             projects_being_worked_on.append(project)
 
-        print(projects_being_worked_on)
+        #print(projects_being_worked_on)
         projects_being_worked_on, projects_done = update(projects_being_worked_on)
         for project in projects_done:
             output.append([project.name]+project.workers)
@@ -168,6 +169,6 @@ if __name__ == "__main__":
         contributors, projects = read_data(input_file)
 
         answer = solve(contributors, projects)
-        print(answer)
+        #print(answer)
         #assert False, "sweet jesus we did it"
         write_file(input_file.name.split('.')[0] + ".out", answer)
