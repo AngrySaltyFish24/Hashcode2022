@@ -130,6 +130,7 @@ def solve(contrib, proj):
             project.assign_workers(workers)
             projects_being_worked_on.append(project)
 
+        print(projects_being_worked_on)
         projects_being_worked_on = update(projects_being_worked_on)
         day_counter += 1
 
